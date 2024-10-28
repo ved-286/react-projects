@@ -1,4 +1,4 @@
-import { useState,useCallback } from 'react'
+import { useState,useCallback, useEffect,useRef } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -9,21 +9,36 @@ function App() {
   const [charAllowed , setCharAllowed] = useState(false)
   const [password, setPassword] = useState("")
 
-  const passwordGenerator = useCallback(()=>{
-    let pass=""
-    let str="ABCDEFGHIJKLMNOPQURSTUVWXYZabcdefghijklmnopqurstuvwxyz"
-    if(numberAllowed) str += "1234567890"
-    if(charAllowed) str += "!@#$%^&&*(((*()+(*&&^%$"
+  //useRef hook
+ const passwordRef = useRef(null)
 
-    for (let i = 1; i < length; i++) {
-      let char = Math.floor(Math.random()*str.length + 1)
+ const copyToClipBoard = useCallback(()=>{
+  passwordRef.current?.select();
+  window.navigator.clipboard.writeText(password)
+ },[password])
+
+  const passwordGenerator = useCallback(() => {
+    let pass = ""
+    let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    if (numberAllowed) str += "0123456789"
+    if (charAllowed) str += "!@#$%^&*-_+=[]{}~`"
+
+    for (let i = 1; i <= length; i++) {
+      let char = Math.floor(Math.random() * str.length + 1)
       pass += str.charAt(char)
+      
     }
 
     setPassword(pass)
 
-  },[numberAllowed,charAllowed,length,setPassword])
 
+  }, [length, numberAllowed, charAllowed, setPassword])
+
+  useEffect(() => {
+    passwordGenerator()
+  }, [length, numberAllowed, charAllowed, passwordGenerator])
+
+ 
   return (
     <>
     <div className='w-full max-w-md mx-auto text-orange-500 p-2 bg-gray-700 border-spacing-1 border-white rounded-md '>
@@ -34,8 +49,12 @@ function App() {
          placeholder='password'
          className='w-full px-2 py-3 outline-none rounded-sm'
          readOnly
+         ref={passwordRef}
         />
-        <button className='bg-blue-600 text-white p-2  rounded-sm'>Copy</button>
+        <button className='bg-blue-600 text-white p-2  rounded-sm'
+                onClick={copyToClipBoard}
+        >
+        Copy</button>
       </div>
       <div className='flex text-sm gap-x-2'>
        <div className='flex items-center gap-x-1'>
@@ -45,6 +64,8 @@ function App() {
                  max={90}
                  className='cursor-pointer'
                  onChange={(e)=>{setLength(e.target.value)}}
+                
+
           />
           <label>Length:{length}</label>
           
@@ -54,7 +75,9 @@ function App() {
           type="checkbox"
           defaultChecked={numberAllowed}
           id='numberinput'
-          onChange={(e)=>{setNumberAllowed((prev)=!prev)}}
+          onChange={() => {
+            setNumberAllowed((prev) => !prev);
+        }}
            />
            <label htmlFor="numberInput">Number</label>
        </div>
@@ -62,7 +85,9 @@ function App() {
         <input type="checkbox"
                defaultChecked={charAllowed}
                id='charInput'
-               onChange={(e)=>{charAllowed((prev)= !prev)}}
+               onChange={() => {
+                setCharAllowed((prev) => !prev )
+            }}
         />
         <label htmlFor="charInput">Charecter</label>
 
