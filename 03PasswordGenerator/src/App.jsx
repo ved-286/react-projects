@@ -25,10 +25,51 @@ function App() {
   },[numberAllowed,charAllowed,length,setPassword])
 
   return (
+    <>
+    <div className='w-full max-w-md mx-auto text-orange-500 p-2 bg-gray-700 border-spacing-1 border-white rounded-md '>
+      <h1 className='text-center text-white'>Password generator</h1>
+      <div className='flex'>
+        <input type="text"
+         value={password}
+         placeholder='password'
+         className='w-full px-2 py-3 outline-none rounded-sm'
+         readOnly
+        />
+        <button className='bg-blue-600 text-white p-2  rounded-sm'>Copy</button>
+      </div>
+      <div className='flex text-sm gap-x-2'>
+       <div className='flex items-center gap-x-1'>
+          <input type="range"
+                 value={length}
+                 min={8}
+                 max={90}
+                 className='cursor-pointer'
+                 onChange={(e)=>{setLength(e.target.value)}}
+          />
+          <label>Length:{length}</label>
+          
+       </div>
+       <div className='flex items-center gap-x-1'>
+          <input 
+          type="checkbox"
+          defaultChecked={numberAllowed}
+          id='numberinput'
+          onChange={(e)=>{setNumberAllowed((prev)=!prev)}}
+           />
+           <label htmlFor="numberInput">Number</label>
+       </div>
+       <div className='flex items-center gap-x-1'>
+        <input type="checkbox"
+               defaultChecked={charAllowed}
+               id='charInput'
+               onChange={(e)=>{charAllowed((prev)= !prev)}}
+        />
+        <label htmlFor="charInput">Charecter</label>
 
-   
-   
-      
+       </div>
+      </div>
+    </div>
+    </>
   )
 }
 
