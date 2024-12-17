@@ -3,9 +3,12 @@ import { IoCloseSharp } from "react-icons/io5";
 import { IoCart } from "react-icons/io5";
 import ItemCard from './ItemCard';
 import { useSelector } from 'react-redux';
+import {useNavigate} from 'react-router-dom'
 
 
 function Cart() {
+
+  const Navigate = useNavigate();
 
   const [activeCart,setActiveCart] = useState(false)
 
@@ -39,7 +42,7 @@ function Cart() {
             <h3 className='font-semibold text-gray-800'>Items: {TotalQty} </h3>
             <h3 className='font-semibold text-gray-800'>Total Amount: {TotalAmount} </h3>
             <hr className='w-[90vw] lg:w-[18vw] my-3 font-bold'/>
-            <button className='bg-green-600 font-bold text-white p-2 rounded-md w-[90vw] lg:w-[18vw]'>Checkout</button>
+            <button onClick={()=> Navigate("./success")} className='bg-green-600 font-bold text-white p-2 rounded-md w-[90vw] lg:w-[18vw]'>Checkout</button>
         </div>
     </div>
     <IoCart onClick={()=> setActiveCart(!activeCart)} className={`bg-white rounded-full p-2 text-5xl shadow-md fixed bottom-10 right-4 ${TotalQty >0 && "animate-bounce delay-500"} `} />
